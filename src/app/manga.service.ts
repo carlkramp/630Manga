@@ -27,6 +27,7 @@ export class MangaService {
   myCover: Cover = new Cover("", "", this.myCoverAttributes, [])
   myCoverData: coverData = new coverData("", "", this.myCover); 
   myCoverFileName: string = "";
+  myCoverArtURL: string = "";
 
 
 
@@ -250,41 +251,68 @@ export class MangaService {
     return this.myChapterArray;
   }
 
-  setCoverFileName(coverId: string) {
+  setCoverFileName(mangaId: string, coverId: string) {
 
+
+    //return this.http.get<{ result: string, response: string, data: Cover }>('https://api.mangadex.org/cover/' + coverId)
+    //  .subscribe(data => {
+    //    this.myCoverData = data 
+    //    this.myCoverFileName = this.myCoverData.data.attributes.fileName;
+    //    console.log(this.myCoverFileName);
+    //    //this.setCoverFileUrl(mangaId, this.myCoverFileName)
+    //    console.log(data);
+    //    console.log("file name set");
+    //    //return this.myCoverFileName;
+    //  })
+
+
+
+     //this.http.get<{ result: string, response: string, data: Cover }>('https://api.mangadex.org/cover/' + coverId)
+     // .pipe(map(async data => {
+     //   this.myCoverData = await data
+     //   this.myCoverFileName = this.myCoverData.data.attributes.fileName;
+     //   console.log(this.myCoverFileName);
+     //   //this.setCoverFileUrl(mangaId, this.myCoverFileName)
+     //   console.log(data);
+     //   console.log("file name set");
+     //   const myCoverUrl = await this.setCoverFileUrl(mangaId, this.myCoverFileName);
+     //   console.log(myCoverUrl);
+     //   return myCoverUrl;
+     // })).subscribe(data => {
+     //   console.log(data);
+     // })
 
     return this.http.get<{ result: string, response: string, data: Cover }>('https://api.mangadex.org/cover/' + coverId)
-      .subscribe(data => {
-        this.myCoverData = data 
-        this.myCoverFileName = this.myCoverData.data.attributes.fileName;
-        console.log(this.myCoverFileName);
-        console.log(data);
-        return this.myCoverFileName;
-      })
-
-
-
-    //return this.http.get('https://uploads.mangadex.org/covers/' + mangaId + /{ cover.filename }.512.jpg)
-      //.subscribe(data => {
-      //  this.myChapterList = data
+      //(data => {
       //  console.log(data);
-      //}
-
-    //   https://api.mangadex.org/cover/{coverId}
+      //  this.myCoverData =  data
+      //  this.myCoverFileName = this.myCoverData.data.attributes.fileName;
+      //  console.log(this.myCoverFileName);
+      //  //this.setCoverFileUrl(mangaId, this.myCoverFileName)
+      //  console.log(data);
+      //  console.log("file name set");
+      //  const myCoverUrl =  this.setCoverFileUrl(mangaId, this.myCoverFileName);
+      //  console.log(myCoverUrl);
+      //  return myCoverUrl;
+      //})
   }
 
   
 
   getCoverFileName() {
+    console.log("file name got");
     return this.myCoverFileName;
   }
 
-  setCoverFileUrl(mangaId: string, coverArtId: string) {
-    this.myCoverArtURL = 'https://uploads.mangadex.org/covers/' + mangaId + '/' + mangaCoverArtId + '.512.jpg'
+  setCoverFileUrl(mangaId: string, coverArtFileName: any) {
+    console.log("cover set");
+    this.myCoverArtURL = 'https://uploads.mangadex.org/covers/' + mangaId + '/' + coverArtFileName + '.512.jpg';
+    return this.myCoverArtURL;
   }
 
   getCoverFileUrl() {
-
+    console.log("cover got");
+    return this.myCoverArtURL;
   }
 
   }
