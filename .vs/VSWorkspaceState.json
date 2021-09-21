@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\coverApiClasses",
+    "\\src\\app\\home",
+    "\\src\\app\\reader",
+    "\\src\\app\\search-result"
+  ],
+  "SelectedNode": "\\src\\app\\manga.service.ts",
+  "PreviewInSolutionExplorer": false
+}

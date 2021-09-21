@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="http://localhost:4200">630Manga</a>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <img [src]=myCoverArtURL />
+    </div>
+    <div class="col-sm-6">
+      <div class="center">
+        <ul class="list-group" *ngIf="myChapterArray.length >= 0">
+          <li *ngFor="let chapter of myChapterArray">
+            <!--<a (click)=onChapterClick(chapter.id) routerLink="/">-->
+            {{ chapter.chapter }}
+            <!--</a>-->
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+

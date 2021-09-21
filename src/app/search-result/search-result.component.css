@@ -1,0 +1,33 @@
+.navbar-brand {
+    color: black;
+}
+
+.container {
+  height: 300px;
+  position: relative;
+  border-style: dashed;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.searchButton {
+    margin-right: 2px;
+    height: 35px;
+    width: 75px;
+}
+
+.searchInput {
+    height: 27px;
+    width: 200px;
+}
+
+.col-sm-8{
+    border-style: dashed;
+}

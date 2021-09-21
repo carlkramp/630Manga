@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="http://localhost:4200">630Manga</a>
+</nav>
+
+
+  <div class="container">
+    <div class="center">
+        <button class="searchButton" type="submit" (click)="onSubmit()">Search</button>
+        <input class="searchInput" id="myTitle" type="text"/>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="center">
+        <ul class="list-group" *ngIf="mangaList.length >= 0">
+          <li *ngFor="let manga of mangaList">
+            <a (click)=onTitleClick(manga) routerLink="/reader">
+              {{ manga.title }}
+            </a>
+          </li>
+        </ul>
+    </div>
+  </div>
