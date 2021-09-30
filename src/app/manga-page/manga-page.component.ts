@@ -96,6 +96,7 @@ export class MangaPageComponent implements OnInit {
   nextChapter() {
     this.myChapterId = this.route.snapshot.params['chapterId'];
     this.myPageArray = [];
+    //this.myPageImages = [];
     this.myPageNumber = 0
     this.myChapterNumber = this.route.snapshot.params['chapterNumber'];
     this.myChapterNumber++;
@@ -128,9 +129,11 @@ export class MangaPageComponent implements OnInit {
     })
   }
 
+
   lastChapter() {
     const chapterId = this.route.snapshot.params['chapterId'];
     this.myPageArray = [];
+    
     this.myChapterNumber = this.route.snapshot.params['chapterNumber'];
     this.myChapterNumber--;
     this.myChapterArray = this.mangaService.getChapterList();
@@ -183,7 +186,7 @@ export class MangaPageComponent implements OnInit {
   reloadPages() {
 
     this.chapterImg = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myPageArray[this.myPageNumber]
-    this.myNextImg = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myPageArray[this.myPageNumber + 1]
+    //this.myNextImg = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myPageArray[this.myPageNumber + 1]
     this.loadNextPage();
  
   }
@@ -214,27 +217,55 @@ export class MangaPageComponent implements OnInit {
 
   }
 
+  //loadNextFivePages() {
+
+  //  let y = 0;
+
+  //      for (let x = this.myPageNumber; x < this.myPageArray.length - 1 && y < 5; x++) {
+  //        var myChapImg = new Image();
+  //        myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[x]
+  //        this.myPageImages.push(myChapImg.src)
+  //        y++
+  //      }
+
+  //}
+
   loadNextFivePages() {
 
     let y = 0;
 
-        for (let x = this.myPageNumber; x < this.myPageArray.length - 1 && y < 5; x++) {
-          var myChapImg = new Image();
-          myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[x]
-          this.myPageImages.push(myChapImg.src)
-          y++
-        }
+  
+    for (let x = this.myPageNumber; x < this.myPageArray.length - 1 && y < 5; x++) {
+      var myChapImg = new Image();
+      myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[x]
+      console.log(myChapImg.src);
+      this.myPageImages.push(myChapImg.src);
+      y++;
+    }
 
   }
+
+
 
   loadNextPage() {
 
 
     if (this.myPageNumber + 4 < this.myPageArray.length - 1) {
       var myChapImg = new Image();
-      myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[this.myPageNumber + 4]
-      this.myPageImages.push(myChapImg.src)
+      myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[this.myPageNumber + 4];
+      if (this.myPageImages.length < 11) {
+        this.myPageImages.push(myChapImg.src);
+      }
+      else {
+        this.myPageImages.shift();
+        this.myPageImages.push(myChapImg.src);
+        console.log(this.myPageImages.length);
+      }
+      
     }
   }
   
 }
+
+
+
