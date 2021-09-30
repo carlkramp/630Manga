@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MangaService } from '../manga.service';
-//import { apiResponse } from '../apiClasses/apiResponse.class';
-//import { apiResults } from '../apiClasses/apiResults.class';
 import { Manga } from '../manga.class';
 
 @Component({
@@ -11,7 +9,6 @@ import { Manga } from '../manga.class';
   styleUrls: ['./search-result.component.css']
 })
 export class SearchResultComponent implements OnInit {
-  //myApiResponse: apiResponse = new apiResponse("", "", [], "", "", "");
   searchInput: string = "";
   mangaList: Array<Manga> = [];
   myFileName: any;

@@ -1,0 +1,1 @@
+"# 630Manga"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/carlkramp/630Manga.gitgit push -u origin main

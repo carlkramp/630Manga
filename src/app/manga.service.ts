@@ -10,7 +10,7 @@ import { noneVolume } from './chapterListApiClasses/noneVolume.class';
 import { Cover } from './coverApiClasses/cover.class';
 import { coverAttributes } from './coverApiClasses/coverAttributes.class';
 import { coverData } from './coverApiClasses/coverData.class';
-import { map } from 'rxjs/operators';
+import { chapterData } from './chapterClasses/chapterData.class';
 
 @Injectable({ providedIn: 'root' })
 export class MangaService {
@@ -28,6 +28,8 @@ export class MangaService {
   myCoverData: coverData = new coverData("", "", this.myCover); 
   myCoverFileName: string = "";
   myCoverArtURL: string = "";
+  myTranslatedLanguage: Array<string> = [];
+  myMangaId = "";
 
 
 
@@ -74,8 +76,8 @@ export class MangaService {
     )
       .subscribe(data => {
         this.myApiResponse = data
-        console.log(data);
-        console.log(this.myApiResponse.data);
+        //console.log(data);
+        //console.log(this.myApiResponse.data);
 
         for (let x = 0; x < this.myApiResponse.data.length; x++) {
           if (JSON.stringify(this.myApiResponse.data[x].attributes.title.en) != null) {
@@ -96,7 +98,7 @@ export class MangaService {
           }
           else if (JSON.stringify(this.myApiResponse.data[x].attributes.title.jp) != null) {
             const myString = JSON.stringify(this.myApiResponse.data[x].attributes.title.jp);
-            console.log(myString);
+            //console.log(myString);
             const myLength = myString.length;
             const myString2 = myString.substring(1, myLength - 1);
             let y = 0;
@@ -133,11 +135,24 @@ export class MangaService {
   }
 
   setChapterList(mangaId: string) {
+    this.myChapterArray = [];
+    this.myTranslatedLanguage.push('en');
+    let searchParams = new HttpParams();
+    let translatedLanguage: Array<string> = ['en'];
+    translatedLanguage.forEach((language: string) => {
+      searchParams = searchParams.append(`translatedLanguage[]`, language)
+    })
 
-    return this.http.get<{ result: string, volumes: Array<Volume>}>('https://api.mangadex.org/manga/' + mangaId + '/aggregate')
+    //searchParams = searchParams.append('translatedLanguage', JSON.stringify(this.myTranslatedLanguage));
+
+    return this.http.get<{ result: string, volumes: Array<Volume> }>('https://api.mangadex.org/manga/' + mangaId + '/aggregate'
+      ,
+      {
+        params: searchParams
+      }
+    )
   .subscribe(data => {
     this.myChapterList = data
-    console.log(data);
 
     let x = 1;
     let y = 1;
@@ -228,7 +243,7 @@ export class MangaService {
           }
 
           this.myChapter.chapter = this.myChapterList.volumes.none.chapters[y].chapter;
-          this.myChapter.count = this.myChapterList.volumes.none.chapters[y].count;
+          this.myChapter.count = this.myChapterList.volumes.none.chapters[y].count
           this.myChapter.id = this.myChapterList.volumes.none.chapters[y].id;
           this.myChapterArray.push(this.myChapter);
           this.myChapter = new Chapter("", 0, "");
@@ -242,7 +257,7 @@ export class MangaService {
         }
     }
 
-    console.log(this.myChapterArray);
+    //console.log(this.myChapterArray);
     })
 
    }
@@ -251,83 +266,32 @@ export class MangaService {
     return this.myChapterArray;
   }
 
-  setCoverFileName(mangaId: string, coverId: string) {
-
-
-    //return this.http.get<{ result: string, response: string, data: Cover }>('https://api.mangadex.org/cover/' + coverId)
-    //  .subscribe(data => {
-    //    this.myCoverData = data 
-    //    this.myCoverFileName = this.myCoverData.data.attributes.fileName;
-    //    console.log(this.myCoverFileName);
-    //    //this.setCoverFileUrl(mangaId, this.myCoverFileName)
-    //    console.log(data);
-    //    console.log("file name set");
-    //    //return this.myCoverFileName;
-    //  })
-
-
-
-     //this.http.get<{ result: string, response: string, data: Cover }>('https://api.mangadex.org/cover/' + coverId)
-     // .pipe(map(async data => {
-     //   this.myCoverData = await data
-     //   this.myCoverFileName = this.myCoverData.data.attributes.fileName;
-     //   console.log(this.myCoverFileName);
-     //   //this.setCoverFileUrl(mangaId, this.myCoverFileName)
-     //   console.log(data);
-     //   console.log("file name set");
-     //   const myCoverUrl = await this.setCoverFileUrl(mangaId, this.myCoverFileName);
-     //   console.log(myCoverUrl);
-     //   return myCoverUrl;
-     // })).subscribe(data => {
-     //   console.log(data);
-     // })
+  getCoverFileName(mangaId: string, coverId: string) {
 
     return this.http.get<{ result: string, response: string, data: Cover }>('https://api.mangadex.org/cover/' + coverId)
-      //(data => {
-      //  console.log(data);
-      //  this.myCoverData =  data
-      //  this.myCoverFileName = this.myCoverData.data.attributes.fileName;
-      //  console.log(this.myCoverFileName);
-      //  //this.setCoverFileUrl(mangaId, this.myCoverFileName)
-      //  console.log(data);
-      //  console.log("file name set");
-      //  const myCoverUrl =  this.setCoverFileUrl(mangaId, this.myCoverFileName);
-      //  console.log(myCoverUrl);
-      //  return myCoverUrl;
-      //})
-  }
 
-  
-
-  getCoverFileName() {
-    console.log("file name got");
-    return this.myCoverFileName;
   }
 
   setCoverFileUrl(mangaId: string, coverArtFileName: any) {
-    console.log("cover set");
+    //console.log("cover set");
     this.myCoverArtURL = 'https://uploads.mangadex.org/covers/' + mangaId + '/' + coverArtFileName + '.512.jpg';
     return this.myCoverArtURL;
   }
 
   getCoverFileUrl() {
-    console.log("cover got");
+    //console.log("cover got");
     return this.myCoverArtURL;
   }
 
+  getChapter(chapterId: string) {
+    return this.http.get<{ result: string, response: string, data: chapterData }>('https://api.mangadex.org/chapter/' + chapterId)
   }
 
 
- //setCover(mangaId: string, coverFileName: string) {
-  //  return this.http.get<{ result: string, response: string, data: Cover }>('https://uploads.mangadex.org/covers/' + mangaId + '/' + coverFileName)
-  //    .subscribe(data => {
-  //      const coverArt = data;
-  //    })
-  //}
+}
 
-  //getCover() {
 
-  //}
+
 
   //getChapter(chapterId: string) {
 

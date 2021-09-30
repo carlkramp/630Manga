@@ -9,13 +9,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ReaderComponent } from './reader/reader.component';
 import { RouterModule } from '@angular/router';
+import { MangaPageComponent } from './manga-page/manga-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     SearchResultComponent,
-    ReaderComponent
+    ReaderComponent,
+    MangaPageComponent
   ],
   imports: [
     BrowserModule,

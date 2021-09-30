@@ -11,9 +11,9 @@
       <div class="center">
         <ul class="list-group" *ngIf="myChapterArray.length >= 0">
           <li *ngFor="let chapter of myChapterArray">
-            <!--<a (click)=onChapterClick(chapter.id) routerLink="/">-->
+            <a (click)=onChapterClick(chapter)>
             {{ chapter.chapter }}
-            <!--</a>-->
+            </a>
           </li>
         </ul>
       </div>

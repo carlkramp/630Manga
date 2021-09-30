@@ -1,6 +1,6 @@
 import { chapterData } from './chapterData.class';
 
-export class getChapterApiResponse {
+export class chapterApiResponse {
   result: string;
   data: chapterData;
 
