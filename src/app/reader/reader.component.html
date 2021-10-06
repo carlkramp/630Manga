@@ -12,6 +12,7 @@
         <ul class="list-group" *ngIf="myChapterArray.length >= 0">
           <li *ngFor="let chapter of myChapterArray">
             <a (click)=onChapterClick(chapter)>
+            <!--{{ chapter.chapter }}-->
             {{ chapter.chapter }}
             </a>
           </li>

@@ -25,6 +25,8 @@ export class MangaPageComponent implements OnInit {
   chapterImg: string = "";
   chapterImg2: string = "";
   myPageArray: Array<string> = [];
+  //myPreLoadPageArray: Array<string> = [];
+  chapterLength: number = 0;
   myPageNumber: number = 0;
   myChapterNumber: number = 0;
   myMangaId = "";
@@ -36,12 +38,10 @@ export class MangaPageComponent implements OnInit {
 
   myPageImages: Array<string> = [];
   myCurrentImg: string = "";
-  myNextImg: string = "";
 
   constructor(private mangaService: MangaService, private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
-    console.log("page loaded");
    
     this.myChapterId = this.route.snapshot.params['chapterId'];
     const pageNumberString = this.route.snapshot.params['pageNumber'];
@@ -96,13 +96,14 @@ export class MangaPageComponent implements OnInit {
   nextChapter() {
     this.myChapterId = this.route.snapshot.params['chapterId'];
     this.myPageArray = [];
-    //this.myPageImages = [];
     this.myPageNumber = 0
     this.myChapterNumber = this.route.snapshot.params['chapterNumber'];
     this.myChapterNumber++;
     this.myChapterArray = this.mangaService.getChapterList();
 
-    this.myChapterId = this.myChapterArray[this.myChapterNumber - 1].id;
+    //this.myChapterId = this.myChapterArray[this.myChapterNumber - 1].id;
+    this.myChapterId = this.myChapterArray[this.myChapterNumber].id;
+    //console.log(this.myChapterArray[this.myChapterNumber - 1].chapter);
 
     this.mangaService.getChapter(this.myChapterId).subscribe(data => {
       this.myChapterApiResponse = data;
@@ -112,6 +113,7 @@ export class MangaPageComponent implements OnInit {
         this.myPageArray.push(this.myChapterApiResponse.data.attributes.data[x]);
       }
 
+      this.chapterLength = this.myPageArray.length;
       const chapterData = this.myChapterApiResponse.data.attributes.data[this.myPageNumber];
       //const chapterDataSaver = this.myChapterApiResponse.data.attributes.dataSaver[2];
 
@@ -129,7 +131,6 @@ export class MangaPageComponent implements OnInit {
     })
   }
 
-
   lastChapter() {
     const chapterId = this.route.snapshot.params['chapterId'];
     this.myPageArray = [];
@@ -137,7 +138,6 @@ export class MangaPageComponent implements OnInit {
     this.myChapterNumber = this.route.snapshot.params['chapterNumber'];
     this.myChapterNumber--;
     this.myChapterArray = this.mangaService.getChapterList();
-    console.log(this.myChapterArray);
 
     this.myChapterId = this.myChapterArray[this.myChapterNumber].id;
 
@@ -150,7 +150,6 @@ export class MangaPageComponent implements OnInit {
       }
 
       this.myPageNumber = this.myPageArray.length - 1;
-      console.log("last chapter page number first: " + this.myPageNumber);
       const chapterData = this.myChapterApiResponse.data.attributes.data[this.myPageNumber];
       //const chapterDataSaver = this.myChapterApiResponse.data.attributes.dataSaver[2];
 
@@ -165,11 +164,6 @@ export class MangaPageComponent implements OnInit {
       this.reloadPages();
 
     })
-
-    //this.myPageNumber = this.myPageArray.length;
-    //console.log("last chapter page number: " + this.myPageNumber);
-
-
   }
 
   @HostListener('window:keyup.arrowright', ['$event'])
@@ -186,7 +180,6 @@ export class MangaPageComponent implements OnInit {
   reloadPages() {
 
     this.chapterImg = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myPageArray[this.myPageNumber]
-    //this.myNextImg = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myPageArray[this.myPageNumber + 1]
     this.loadNextPage();
  
   }
@@ -237,8 +230,8 @@ export class MangaPageComponent implements OnInit {
   
     for (let x = this.myPageNumber; x < this.myPageArray.length - 1 && y < 5; x++) {
       var myChapImg = new Image();
-      myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[x]
-      console.log(myChapImg.src);
+      //myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[x]
+      myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myPageArray[x];
       this.myPageImages.push(myChapImg.src);
       y++;
     }
@@ -252,17 +245,17 @@ export class MangaPageComponent implements OnInit {
 
     if (this.myPageNumber + 4 < this.myPageArray.length - 1) {
       var myChapImg = new Image();
-      myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[this.myPageNumber + 4];
+      myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myPageArray[this.myPageNumber + 4];
       if (this.myPageImages.length < 11) {
         this.myPageImages.push(myChapImg.src);
       }
       else {
         this.myPageImages.shift();
         this.myPageImages.push(myChapImg.src);
-        console.log(this.myPageImages.length);
       }
-      
+
     }
+
   }
   
 }

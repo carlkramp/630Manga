@@ -3,13 +3,12 @@
     "",
     "\\src",
     "\\src\\app",
-    "\\src\\app\\chapterClasses",
     "\\src\\app\\chapterListApiClasses",
     "\\src\\app\\manga-page",
     "\\src\\app\\reader",
     "\\src\\app\\search-result",
     "\\src\\assets"
   ],
-  "SelectedNode": "\\src\\app\\manga-page\\manga-page.component.css",
+  "SelectedNode": "\\src\\app\\manga.service.ts",
   "PreviewInSolutionExplorer": false
 }

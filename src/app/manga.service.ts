@@ -35,34 +35,6 @@ export class MangaService {
 
   constructor(private http: HttpClient) { }
 
-  //searchManga() {
-
-  //  return this.http.get<{ results: Array<apiResults>, limit: string, offset: string, total: string }>('https://api.mangadex.org/manga')
-  //    .pipe(map(data => {
-  //      this.myApiResponse.results = data.results, this.myApiResponse.limit = data.limit,
-  //        this.myApiResponse.offset = data.offset, this.myApiResponse.total = data.total;
-  //      return this.myApiResponse;
-  //    }))
-
-  //}
-
-  //searchMangaByTitle(mySearchInput: string) {
-  //  console.log(mySearchInput);
-  //  let searchParams = new HttpParams();
-  //  searchParams = searchParams.append('title', mySearchInput);
-
-  //  return this.http.get<{ results: Array<apiResults>, limit: string, offset: string, total: string }>('https://api.mangadex.org/manga' ,
-  //    {
-  //      params: searchParams
-  //    }
-  //  )
-  //    .pipe(map(data => {
-  //      this.myApiResponse.results = data.results, this.myApiResponse.limit = data.limit,
-  //        this.myApiResponse.offset = data.offset, this.myApiResponse.total = data.total;
-  //      return this.myApiResponse;
-  //    }))}
-
-
   setMangaList(mySearchInput: string) {
     this.mangaList = [];
 
@@ -77,7 +49,6 @@ export class MangaService {
       .subscribe(data => {
         this.myApiResponse = data
         //console.log(data);
-        //console.log(this.myApiResponse.data);
 
         for (let x = 0; x < this.myApiResponse.data.length; x++) {
           if (JSON.stringify(this.myApiResponse.data[x].attributes.title.en) != null) {
@@ -98,7 +69,6 @@ export class MangaService {
           }
           else if (JSON.stringify(this.myApiResponse.data[x].attributes.title.jp) != null) {
             const myString = JSON.stringify(this.myApiResponse.data[x].attributes.title.jp);
-            //console.log(myString);
             const myLength = myString.length;
             const myString2 = myString.substring(1, myLength - 1);
             let y = 0;
@@ -143,124 +113,32 @@ export class MangaService {
       searchParams = searchParams.append(`translatedLanguage[]`, language)
     })
 
-    //searchParams = searchParams.append('translatedLanguage', JSON.stringify(this.myTranslatedLanguage));
-
     return this.http.get<{ result: string, volumes: Array<Volume> }>('https://api.mangadex.org/manga/' + mangaId + '/aggregate'
       ,
       {
         params: searchParams
       }
     )
-  .subscribe(data => {
-    this.myChapterList = data
+      .subscribe(data => {
+        this.myChapterList = data
 
-    let x = 1;
-    let y = 1;
-    let setChapterBoolean = true;
+        for (const [key] of Object.entries(this.myChapterList.volumes)) {
+          let x = key;
 
-
-    while (setChapterBoolean == true)
-    {
-      try {
-        this.myChapterList.volumes[x].chapters[y].chapter
-      }
-      catch (error) {
-        break;
-      }
-      while (setChapterBoolean == true)
-      {
-            this.myChapter.chapter = this.myChapterList.volumes[x].chapters[y].chapter;
-            this.myChapter.count = this.myChapterList.volumes[x].chapters[y].count;
-            this.myChapter.id = this.myChapterList.volumes[x].chapters[y].id;
+          for (const [key] of Object.entries(this.myChapterList.volumes[x].chapters)) {
+            this.myChapter.chapter = this.myChapterList.volumes[x].chapters[key].chapter;
+            this.myChapter.count = this.myChapterList.volumes[x].chapters[key].count;
+            this.myChapter.id = this.myChapterList.volumes[x].chapters[key].id;
             this.myChapterArray.push(this.myChapter);
             this.myChapter = new Chapter("", 0, "");
-            y = y + 0.5;
-
-            try
-            {
-              this.myChapterList.volumes[x].chapters[y].chapter;
-            }
-            catch (error)
-            {
-              if (y % 1 != 0)
-              {
-                y = y + 0.5;
-              }
-              else
-              {
-                break;
-              }
-            }
-
-            try
-            {
-              this.myChapterList.volumes[x].chapters[y].chapter;
-            }
-            catch (error)
-            {
-              break;
-            }
-
           }
-        x++;
 
-        try
-        {
-          this.myChapterList.volumes[x].chapters[y].chapter
         }
-        catch (error)
-        {
-          break;
-        }
-
-    }
-
-    while (setChapterBoolean == true)
-    {
-        try
-        {
-          y = y + 0.5;
-
-          try
-          {
-            this.myChapterList.volumes[x].chapters[y].chapter;
-          }
-          catch (error) {
-            if (y % 1 != 0)
-            {
-              y = y + 0.5;
-            }
-            else {
-              break;
-            }
-          }
-
-          try {
-            this.myChapterList.volumes.none.chapters[y].chapter;
-          }
-          catch (error) {
-            break;
-          }
-
-          this.myChapter.chapter = this.myChapterList.volumes.none.chapters[y].chapter;
-          this.myChapter.count = this.myChapterList.volumes.none.chapters[y].count
-          this.myChapter.id = this.myChapterList.volumes.none.chapters[y].id;
-          this.myChapterArray.push(this.myChapter);
-          this.myChapter = new Chapter("", 0, "");
-      
-        }
-        catch (error)
-        {
-          console.log(error);
-          setChapterBoolean = false;
-          break;
-        }
-    }
-
-    //console.log(this.myChapterArray);
-    })
-
-   }
+        this.myChapterArray.sort(function (a: any, b: any) {
+          return a.chapter - b.chapter
+        });
+      })
+}
 
   getChapterList() {
     return this.myChapterArray;
@@ -273,13 +151,11 @@ export class MangaService {
   }
 
   setCoverFileUrl(mangaId: string, coverArtFileName: any) {
-    //console.log("cover set");
     this.myCoverArtURL = 'https://uploads.mangadex.org/covers/' + mangaId + '/' + coverArtFileName + '.512.jpg';
     return this.myCoverArtURL;
   }
 
   getCoverFileUrl() {
-    //console.log("cover got");
     return this.myCoverArtURL;
   }
 
@@ -292,37 +168,124 @@ export class MangaService {
 
 
 
+//setChapterList(mangaId: string) {
+//  this.myChapterArray = [];
+//  this.myTranslatedLanguage.push('en');
+//  let searchParams = new HttpParams();
+//  let translatedLanguage: Array<string> = ['en'];
+//  translatedLanguage.forEach((language: string) => {
+//    searchParams = searchParams.append(`translatedLanguage[]`, language)
+//  })
 
-  //getChapter(chapterId: string) {
+//  return this.http.get<{ result: string, volumes: Array<Volume> }>('https://api.mangadex.org/manga/' + mangaId + '/aggregate'
+//    ,
+//    {
+//      params: searchParams
+//    }
+//  )
+//    .subscribe(data => {
+//      this.myChapterList = data
+//      console.log(data);
 
-  //  return this.http.get<{}>('https://api.mangadex.org/chapter/' + chapterId)
-  //    .subscribe(data => {
-
-  //      this.myChapterList = data,
-  //        this.myChapterList.result = data.result,
-  //        this.myChapterList.volumes = data.volumes,
-  //        console.log(data);
-  //      const myString = JSON.stringify(this.myChapterList.volumes[1].chapters[1].id)
-  //      console.log("This is my chapter list:" + this.myChapterList),
-  //        console.log("This is my chapter list:" + this.myChapterList.result),
-  //        console.log("This is my chapter list:" + myString);
-  //      return this.myChapterList;
-
-  //    })
-  //}
+//      let x = 1;
+//      let y = 1;
+//      let setChapterBoolean = true;
 
 
+//      while (setChapterBoolean == true) {
+//        try {
+//          this.myChapterList.volumes[x].chapters[y].chapter
+//        }
+//        catch (error) {
+//          console.log("error setting chapter");
+//          break;
+//        }
+//        while (setChapterBoolean == true) {
+//          this.myChapter.chapter = this.myChapterList.volumes[x].chapters[y].chapter;
+//          this.myChapter.count = this.myChapterList.volumes[x].chapters[y].count;
+//          this.myChapter.id = this.myChapterList.volumes[x].chapters[y].id;
+//          this.myChapterArray.push(this.myChapter);
+//          this.myChapter = new Chapter("", 0, "");
+//          y = y + 0.5;
 
-    //let searchParams = new HttpParams();
+//          try {
+//            this.myChapterList.volumes[x].chapters[y].chapter;
+//          }
+//          catch (error) {
+//            if (y % 1 != 0) {
+//              y = y + 0.5;
+//            }
+//            else {
+//              console.log("error setting chapter");
+//              break;
+//            }
+//          }
 
-    //searchParams = searchParams.append('volume', 'asc');
-    //searchParams = searchParams.append('chapter', 'asc');
-    //console.log(searchParams);
+//          try {
+//            this.myChapterList.volumes[x].chapters[y].chapter;
+//          }
+//          catch (error) {
+//            console.log("error setting chapter");
+//            break;
+//          }
 
-    //searchParams = searchParams.append('order=volume=enum', 'asc');
-    //console.log(searchParams);
+//        }
+//        x++;
 
-    // view manga - https://api.mangadex.org/manga/{id}
-    // get manga chapters/volumes https://api.mangadex.org/manga/{id}/aggregate
-    // get manga feed https://api.mangadex.org/manga/{id}/feed
-    // 32d76d19-8a05-4db0-9fc2-e0b0648fe9d0 - slime ID
+//        try {
+//          this.myChapterList.volumes[x].chapters[y].chapter
+//        }
+//        catch (error) {
+//          console.log("error setting chapter");
+//          break;
+//        }
+
+//      }
+
+//      while (setChapterBoolean == true) {
+//        try {
+//          y = y + 0.5;
+
+//          try {
+//            this.myChapterList.volumes[x].chapters[y].chapter;
+//          }
+//          catch (error) {
+//            if (y % 1 != 0) {
+//              y = y + 0.5;
+//            }
+//            else {
+//              console.log("error setting chapter");
+//              break;
+//            }
+//          }
+
+//          try {
+//            this.myChapterList.volumes.none.chapters[y].chapter;
+//          }
+//          catch (error) {
+//            console.log("error setting chapter");
+//            break;
+//          }
+
+//          this.myChapter.chapter = this.myChapterList.volumes.none.chapters[y].chapter;
+//          this.myChapter.count = this.myChapterList.volumes.none.chapters[y].count
+//          this.myChapter.id = this.myChapterList.volumes.none.chapters[y].id;
+//          this.myChapterArray.push(this.myChapter);
+//          this.myChapter = new Chapter("", 0, "");
+
+//        }
+//        catch (error) {
+//          console.log(error);
+//          setChapterBoolean = false;
+//          console.log("error setting chapter");
+//          break;
+//        }
+//      }
+
+//      console.log(this.myChapterArray);
+//    })
+
+//}
+
+
+
