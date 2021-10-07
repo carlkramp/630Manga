@@ -23,9 +23,7 @@ export class MangaPageComponent implements OnInit {
   myChapterData: chapterData = new chapterData("", "", this.myChapterAttributes, this.myChapterRelationships);
   myChapterApiResponse: chapterApiResponse = new chapterApiResponse("", this.myChapterData);
   chapterImg: string = "";
-  chapterImg2: string = "";
   myPageArray: Array<string> = [];
-  //myPreLoadPageArray: Array<string> = [];
   chapterLength: number = 0;
   myPageNumber: number = 0;
   myChapterNumber: number = 0;
@@ -37,7 +35,6 @@ export class MangaPageComponent implements OnInit {
   private ngUnsubscribe = new Subject();
 
   myPageImages: Array<string> = [];
-  myCurrentImg: string = "";
 
   constructor(private mangaService: MangaService, private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
@@ -49,6 +46,7 @@ export class MangaPageComponent implements OnInit {
     this.mangaService.setChapterList(this.myMangaId);
     this.myPageNumber = parseInt(pageNumberString);
     this.getChapter();
+    this.myChapterArray = this.mangaService.getChapterList();
 
   }
 
@@ -63,14 +61,16 @@ export class MangaPageComponent implements OnInit {
     this.myChapterNumber = this.route.snapshot.params['chapterNumber'];
     this.myMangaId = this.route.snapshot.params['mangaId'];
     this.myPageNumber = parseInt(pageNumberString);
+
     if (this.myPageNumber + 1 < this.myPageArray.length) {
       this.myPageNumber = this.myPageNumber + 1;
       this.router.navigate(['/manga', this.myMangaId, this.myChapterNumber, chapterId, this.myPageNumber]);
       this.reloadPages();
     }
-    else if (this.myPageNumber + 1 == this.myPageArray.length)
+    else if (this.myPageNumber + 1 == this.myPageArray.length && this.myChapterNumber < this.myChapterArray.length - 1)
     {
       this.nextChapter();
+
 
     }
   
@@ -100,10 +100,7 @@ export class MangaPageComponent implements OnInit {
     this.myChapterNumber = this.route.snapshot.params['chapterNumber'];
     this.myChapterNumber++;
     this.myChapterArray = this.mangaService.getChapterList();
-
-    //this.myChapterId = this.myChapterArray[this.myChapterNumber - 1].id;
     this.myChapterId = this.myChapterArray[this.myChapterNumber].id;
-    //console.log(this.myChapterArray[this.myChapterNumber - 1].chapter);
 
     this.mangaService.getChapter(this.myChapterId).subscribe(data => {
       this.myChapterApiResponse = data;
@@ -209,19 +206,6 @@ export class MangaPageComponent implements OnInit {
     })
 
   }
-
-  //loadNextFivePages() {
-
-  //  let y = 0;
-
-  //      for (let x = this.myPageNumber; x < this.myPageArray.length - 1 && y < 5; x++) {
-  //        var myChapImg = new Image();
-  //        myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[x]
-  //        this.myPageImages.push(myChapImg.src)
-  //        y++
-  //      }
-
-  //}
 
   loadNextFivePages() {
 

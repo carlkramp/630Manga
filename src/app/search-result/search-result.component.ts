@@ -11,7 +11,6 @@ import { Manga } from '../manga.class';
 export class SearchResultComponent implements OnInit {
   searchInput: string = "";
   mangaList: Array<Manga> = [];
-  myFileName: any;
 
   constructor(private mangaService: MangaService, private router: Router) { }
 

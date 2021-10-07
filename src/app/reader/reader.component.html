@@ -1,22 +1,31 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="http://localhost:4200">630Manga</a>
-</nav>
+<div class="background">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="http://localhost:4200">630Manga</a>
+  </nav>
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-6">
-      <img [src]=myCoverArtURL />
-    </div>
-    <div class="col-sm-6">
-      <div class="center">
-        <ul class="list-group" *ngIf="myChapterArray.length >= 0">
-          <li *ngFor="let chapter of myChapterArray">
-            <a (click)=onChapterClick(chapter)>
-            <!--{{ chapter.chapter }}-->
-            {{ chapter.chapter }}
-            </a>
-          </li>
-        </ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="myImage">
+          <img [src]=myCoverArtURL />
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="center">
+          <!--<ul class="list-group" *ngIf="myChapterArray.length >= 0">
+            <li class=myList *ngFor="let chapter of myChapterArray">-->
+          <div *ngIf="myChapterArray.length >= 0">
+            <div class="myList" *ngFor="let chapter of myChapterArray">
+              <a class="chapters" (click)=onChapterClick(chapter)>
+
+                <!--{{ chapter.chapter }}-->
+                {{mangaTitle}} - Chapter {{ chapter.chapter }}
+              </a>
+            </div>
+          </div>
+            <!--</li>
+          </ul>-->
+        </div>
       </div>
     </div>
   </div>

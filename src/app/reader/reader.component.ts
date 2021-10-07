@@ -45,9 +45,7 @@ export class ReaderComponent implements OnInit {
 
   onChapterClick(myChapter: Chapter) {
     const chapterId = myChapter.id;
-    //const chapterNumber = myChapter.chapter;
     const chapterNumberNew = this.myChapterArray.indexOf(myChapter);
-    //console.log(chapterNumberNew);
     this.router.navigate(['/manga', this.mangaId, chapterNumberNew, chapterId, this.myPageNumber]);
   }
 
