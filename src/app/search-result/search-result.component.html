@@ -12,7 +12,7 @@
 
   <div class="container">
     <div class="center">
-        <ul class="list-group" *ngIf="mangaList.length >= 0">
+        <ul class="list-group" >
           <li *ngFor="let manga of mangaList">
             <a (click)=onTitleClick(manga) routerLink="/reader">
               {{ manga.title }}

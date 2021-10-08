@@ -3,12 +3,9 @@
     "",
     "\\src",
     "\\src\\app",
-    "\\src\\app\\chapterListApiClasses",
     "\\src\\app\\manga-page",
-    "\\src\\app\\reader",
-    "\\src\\app\\search-result",
     "\\src\\assets"
   ],
-  "SelectedNode": "\\src\\app\\reader\\reader.component.ts",
+  "SelectedNode": "\\src\\app\\manga-page\\manga-page.component.ts",
   "PreviewInSolutionExplorer": false
 }

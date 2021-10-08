@@ -48,7 +48,6 @@ export class MangaService {
     )
       .subscribe(data => {
         this.myApiResponse = data
-        //console.log(data);
 
         for (let x = 0; x < this.myApiResponse.data.length; x++) {
           if (JSON.stringify(this.myApiResponse.data[x].attributes.title.en) != null) {
@@ -144,7 +143,7 @@ export class MangaService {
     return this.myChapterArray;
   }
 
-  getCoverFileName(mangaId: string, coverId: string) {
+  getCoverFileName(coverId: string) {
 
     return this.http.get<{ result: string, response: string, data: Cover }>('https://api.mangadex.org/cover/' + coverId)
 
@@ -165,127 +164,5 @@ export class MangaService {
 
 
 }
-
-
-
-//setChapterList(mangaId: string) {
-//  this.myChapterArray = [];
-//  this.myTranslatedLanguage.push('en');
-//  let searchParams = new HttpParams();
-//  let translatedLanguage: Array<string> = ['en'];
-//  translatedLanguage.forEach((language: string) => {
-//    searchParams = searchParams.append(`translatedLanguage[]`, language)
-//  })
-
-//  return this.http.get<{ result: string, volumes: Array<Volume> }>('https://api.mangadex.org/manga/' + mangaId + '/aggregate'
-//    ,
-//    {
-//      params: searchParams
-//    }
-//  )
-//    .subscribe(data => {
-//      this.myChapterList = data
-//      console.log(data);
-
-//      let x = 1;
-//      let y = 1;
-//      let setChapterBoolean = true;
-
-
-//      while (setChapterBoolean == true) {
-//        try {
-//          this.myChapterList.volumes[x].chapters[y].chapter
-//        }
-//        catch (error) {
-//          console.log("error setting chapter");
-//          break;
-//        }
-//        while (setChapterBoolean == true) {
-//          this.myChapter.chapter = this.myChapterList.volumes[x].chapters[y].chapter;
-//          this.myChapter.count = this.myChapterList.volumes[x].chapters[y].count;
-//          this.myChapter.id = this.myChapterList.volumes[x].chapters[y].id;
-//          this.myChapterArray.push(this.myChapter);
-//          this.myChapter = new Chapter("", 0, "");
-//          y = y + 0.5;
-
-//          try {
-//            this.myChapterList.volumes[x].chapters[y].chapter;
-//          }
-//          catch (error) {
-//            if (y % 1 != 0) {
-//              y = y + 0.5;
-//            }
-//            else {
-//              console.log("error setting chapter");
-//              break;
-//            }
-//          }
-
-//          try {
-//            this.myChapterList.volumes[x].chapters[y].chapter;
-//          }
-//          catch (error) {
-//            console.log("error setting chapter");
-//            break;
-//          }
-
-//        }
-//        x++;
-
-//        try {
-//          this.myChapterList.volumes[x].chapters[y].chapter
-//        }
-//        catch (error) {
-//          console.log("error setting chapter");
-//          break;
-//        }
-
-//      }
-
-//      while (setChapterBoolean == true) {
-//        try {
-//          y = y + 0.5;
-
-//          try {
-//            this.myChapterList.volumes[x].chapters[y].chapter;
-//          }
-//          catch (error) {
-//            if (y % 1 != 0) {
-//              y = y + 0.5;
-//            }
-//            else {
-//              console.log("error setting chapter");
-//              break;
-//            }
-//          }
-
-//          try {
-//            this.myChapterList.volumes.none.chapters[y].chapter;
-//          }
-//          catch (error) {
-//            console.log("error setting chapter");
-//            break;
-//          }
-
-//          this.myChapter.chapter = this.myChapterList.volumes.none.chapters[y].chapter;
-//          this.myChapter.count = this.myChapterList.volumes.none.chapters[y].count
-//          this.myChapter.id = this.myChapterList.volumes.none.chapters[y].id;
-//          this.myChapterArray.push(this.myChapter);
-//          this.myChapter = new Chapter("", 0, "");
-
-//        }
-//        catch (error) {
-//          console.log(error);
-//          setChapterBoolean = false;
-//          console.log("error setting chapter");
-//          break;
-//        }
-//      }
-
-//      console.log(this.myChapterArray);
-//    })
-
-//}
-
 
 

@@ -31,7 +31,7 @@ export class ReaderComponent implements OnInit {
     this.mangaTitle = this.route.snapshot.params['title'];
     this.mangaId = this.route.snapshot.params['id'];
     this.mangaCoverArtId = this.route.snapshot.params['coverArtId'];
-    this.mangaService.getCoverFileName(this.mangaId, this.mangaCoverArtId).subscribe(data => {
+    this.mangaService.getCoverFileName(this.mangaCoverArtId).subscribe(data => {
       this.myCoverData = data;
       this.myCoverFileName = this.myCoverData.data.attributes.fileName;
       this.myCoverArtURL = 'https://uploads.mangadex.org/covers/' + this.mangaId + '/' + this.myCoverFileName + '.512.jpg'

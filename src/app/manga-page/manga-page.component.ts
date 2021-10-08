@@ -35,6 +35,7 @@ export class MangaPageComponent implements OnInit {
   private ngUnsubscribe = new Subject();
 
   myPageImages: Array<string> = [];
+  pageLoaded: boolean = true;
 
   constructor(private mangaService: MangaService, private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
@@ -43,6 +44,7 @@ export class MangaPageComponent implements OnInit {
     this.myChapterId = this.route.snapshot.params['chapterId'];
     const pageNumberString = this.route.snapshot.params['pageNumber'];
     this.myMangaId = this.route.snapshot.params['mangaId'];
+    this.pageLoaded = true;
     this.mangaService.setChapterList(this.myMangaId);
     this.myPageNumber = parseInt(pageNumberString);
     this.getChapter();
@@ -187,6 +189,18 @@ export class MangaPageComponent implements OnInit {
       this.myChapterApiResponse = data;
       this.myChapterId = this.myChapterApiResponse.data.id;
       this.myChapterHash = this.myChapterApiResponse.data.attributes.hash;
+      if (this.myChapterHash == "") {
+        console.log("error");
+        this.pageLoaded = false;
+        return;
+      }
+      //try {
+      //  this.myChapterHash = this.myChapterApiResponse.data.attributes.hash;
+      //}
+      //catch (error) {
+      //  console.log("This chapter is unavailable");
+      //}
+
       for (let x = 0; x < this.myChapterApiResponse.data.attributes.data.length; x++) {
         this.myPageArray.push(this.myChapterApiResponse.data.attributes.data[x]);
       }
@@ -196,12 +210,17 @@ export class MangaPageComponent implements OnInit {
 
       const atHomeUrl = 'https://api.mangadex.org/at-home/server/' + this.myChapterId
 
-      this.http.get<{ result: string, baseUrl: string }>(atHomeUrl).subscribe(data => {
-        this.myBaseUrl = data.baseUrl;
-        this.chapterImg = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + chapterData
-        this.loadNextFivePages();
-       
-      });
+
+      this.http.get<{ result: string, baseUrl: string }>(atHomeUrl).subscribe(
+        data => {
+          this.myBaseUrl = data.baseUrl;
+          this.chapterImg = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + chapterData
+          this.loadNextFivePages();
+          }
+        );
+      
+    
+      
 
     })
 
@@ -214,7 +233,6 @@ export class MangaPageComponent implements OnInit {
   
     for (let x = this.myPageNumber; x < this.myPageArray.length - 1 && y < 5; x++) {
       var myChapImg = new Image();
-      //myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myChapterApiResponse.data.attributes.data[x]
       myChapImg.src = this.myBaseUrl + '/' + 'data' + '/' + this.myChapterHash + '/' + this.myPageArray[x];
       this.myPageImages.push(myChapImg.src);
       y++;

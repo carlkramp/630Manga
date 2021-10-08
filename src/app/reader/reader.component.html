@@ -12,19 +12,13 @@
       </div>
       <div class="col-sm-6">
         <div class="center">
-          <!--<ul class="list-group" *ngIf="myChapterArray.length >= 0">
-            <li class=myList *ngFor="let chapter of myChapterArray">-->
           <div *ngIf="myChapterArray.length >= 0">
             <div class="myList" *ngFor="let chapter of myChapterArray">
               <a class="chapters" (click)=onChapterClick(chapter)>
-
-                <!--{{ chapter.chapter }}-->
                 {{mangaTitle}} - Chapter {{ chapter.chapter }}
               </a>
             </div>
           </div>
-            <!--</li>
-          </ul>-->
         </div>
       </div>
     </div>
